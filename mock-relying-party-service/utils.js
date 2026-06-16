@@ -84,6 +84,15 @@ const generateRandomString = (strLength = 16) => {
  */
 const decodeUserInfoResponse = async (userInfoResponse) => {
   try {
+    // If userInfoResponse is already a parsed object (not a JWS/JWE string),
+    // return it directly without decoding.
+    if (typeof userInfoResponse === "object" && userInfoResponse !== null) {
+      console.log(
+        "userInfoResponse is already an object, returning it directly",
+      );
+      return userInfoResponse;
+    }
+
     const parts = userInfoResponse.split(".");
     const isJWE =
       USERINFO_RESPONSE_TYPE.toLowerCase() === "jwe" && parts.length === 5;
