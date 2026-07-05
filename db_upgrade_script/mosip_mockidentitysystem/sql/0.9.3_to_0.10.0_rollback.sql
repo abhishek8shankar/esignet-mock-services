@@ -1,3 +1,3 @@
-\c mosip_mockidentitysystem
+\c :mosipdbname
 
 drop table mockidentitysystem.verified_claim;

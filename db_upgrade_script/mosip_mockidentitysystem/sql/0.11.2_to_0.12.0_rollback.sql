@@ -1,3 +1,3 @@
-\c mosip_mockidentitysystem
+\c :mosipdbname
 
 DROP TABLE IF EXISTS mockidentitysystem.partner_data;

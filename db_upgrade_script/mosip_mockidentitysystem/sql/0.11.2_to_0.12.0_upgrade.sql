@@ -1,4 +1,4 @@
-\c mosip_mockidentitysystem
+\c :mosipdbname
 
 CREATE TABLE mockidentitysystem.partner_data (
     partner_id character varying(100) NOT NULL,

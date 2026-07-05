@@ -1,4 +1,4 @@
-\c mosip_mockidentitysystem
+\c :mosipdbname
 
 CREATE TABLE mockidentitysystem.verified_claim(
     id VARCHAR(100) NOT NULL,

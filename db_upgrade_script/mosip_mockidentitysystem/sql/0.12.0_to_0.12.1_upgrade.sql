@@ -1,4 +1,4 @@
-\c mosip_mockidentitysystem
+\c :mosipdbname
 
 CREATE TABLE mockidentitysystem.ca_cert_store(
 	cert_id character varying(36) NOT NULL,
