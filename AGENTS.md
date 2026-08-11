@@ -121,8 +121,11 @@ Each service/UI also has a `Dockerfile`; CI (`push-trigger.yml`) builds and push
    independently (see the module guide for exact local run steps).
 4. To exercise the mock identity system and relying-party portal together locally, use the
    Compose files in `docker-compose/` as described in `docker-compose/README.md`.
-5. Run the relevant module's tests/build before opening a PR (`mvn -pl mock-identity-system
-   test` for the Java module; `npm test` / `npm run build` for the Node/React modules).
+5. Run the relevant module's documented test/build commands before opening a PR. For
+   `mock-identity-system`, run `mvn -pl mock-identity-system test`. For each Node/React
+   module, follow its own `AGENTS.md`/`README.md` — the available npm scripts differ
+   per module (e.g. `mock-relying-party-service` has no test script; `npm test` there
+   just exits with an error placeholder).
 
 ## Pull Request Guidelines
 

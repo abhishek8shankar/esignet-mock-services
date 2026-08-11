@@ -31,7 +31,7 @@ production system at this module.
 Local setup (from the repo root, matching `docker-compose/README.md`):
 
 ```shell
-docker compose --file ../docker-compose/dependent-docker-compose.yml up
+docker compose --file docker-compose/dependent-docker-compose.yml up
 mvn clean install -Dgpg.skip=true -DskipTests=true
 ```
 

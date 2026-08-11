@@ -39,7 +39,7 @@ Docker:
 docker build -t mock-relying-party-ui-esim:local .
 docker run -it -d -p 5000:5000 \
   -e ESIGNET_UI_BASE_URL='http://localhost:3000' \
-  -e MOCK_RELYING_PARTY_BASE_URL=http://localhost:8888 \
+  -e MOCK_RELYING_PARTY_SERVER_URL=http://localhost:8888 \
   -e REDIRECT_URI=http://localhost:5000/userprofile \
   -e CLIENT_ID=esim \
   -e ACRS="mosip:esignet:acr:static-code" \

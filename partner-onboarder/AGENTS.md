@@ -5,8 +5,10 @@ Parent guide: [../AGENTS.md](../AGENTS.md)
 ## Purpose
 
 Onboards the mock relying party as an OIDC partner with MOSIP by exchanging certificates, so
-that the mock relying-party portal can be used against a real eSignet deployment (identity
-plugin). See the [mosip-onboarding repo](https://github.com/mosip/mosip-onboarding) for the
+that the mock relying-party portal can be used against a non-production eSignet deployment
+(identity plugin) — this repo is only for non-production use (per the root `README.md`), even
+though `install.sh`/`values.yaml` accept inputs (public domains, certificates, S3/NFS config)
+that could target a production-style cluster. See the [mosip-onboarding repo](https://github.com/mosip/mosip-onboarding) for the
 underlying onboarding job this wraps. Only needed when the `mosip-identity` plugin is used
 (per the root `README.md`).
 
