@@ -7,6 +7,23 @@ onboarding:
   modules:
     - name: mock-rp-oidc
       enabled: true
+
+# Edit this propertiesOverride block and run the onboarder Job to change any of these values. 
+  propertiesOverride:
+    mock-rp-oidc:
+      POLICY_NAME: mpolicy-default-mock-rp-oidc12
+      POLICY_GROUP_NAME: mpolicygroup-default-mock-rp-oidc12
+      PARTNER_KC_USERNAME: mpartner-default-mock-rp-oidc12
+      PARTNER_MANAGER_USERNAME: mock-rp-oidc-kc-mockusername
+      PARTNER_MANAGER_PASSWORD: mock-rp-oidc-kc-mockuserpassword
+      OIDC_CLIENTID: default-non-mosipid-oidc-client13
+      OIDC_CLIENT_NAME: "Health service OIDC Client13"
+      # Set MOSIP_ID to true when the MOSIP plugin is used .
+      MOSIP_ID: "false"
+      # Set the LOGO_URI and REDIRECT_URIS befor installation .
+      LOGO_URI: https://healthservices.sandbox.mosip.net/logo.png
+      REDIRECT_URIS: https://healthservices.sandbox.mosip.net/userprofile
+      
 #  configmaps:
 #    s3:
 #      s3-host: 'http://minio.minio:9000'
