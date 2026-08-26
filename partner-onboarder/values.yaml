@@ -8,21 +8,30 @@ onboarding:
     - name: mock-rp-oidc
       enabled: true
 
-# Edit this propertiesOverride block and run the onboarder Job to change any of these values. 
+  # Edit this propertiesOverride block and run the onboarder Job to change any of these values.
   propertiesOverride:
     mock-rp-oidc:
-      POLICY_NAME: mpolicy-default-mock-rp-oidc12
-      POLICY_GROUP_NAME: mpolicygroup-default-mock-rp-oidc12
-      PARTNER_KC_USERNAME: mpartner-default-mock-rp-oidc12
-      PARTNER_MANAGER_USERNAME: mock-rp-oidc-kc-mockusername
-      PARTNER_MANAGER_PASSWORD: mock-rp-oidc-kc-mockuserpassword
-      OIDC_CLIENTID: default-non-mosipid-oidc-client13
-      OIDC_CLIENT_NAME: "Health service OIDC Client13"
-      # Set MOSIP_ID to true when the MOSIP plugin is used .
+      POLICY_NAME: mpolicy-default-mock-rp-oidc888
+      POLICY_GROUP_NAME: mpolicygroup-default-mock-rp-oidc888
+      PARTNER_KC_USERNAME: mpartner-default-mock-rp-oidc888
+      PARTNER_MANAGER_USERNAME: mock-rp-oidc-kc-mockusername888
+      PARTNER_MANAGER_PASSWORD: mock-rp-oidc-kc-mockuserpassword888
+      OIDC_CLIENTID: default-non-mosipid-oidc-client888
+      OIDC_CLIENT_NAME: "Health service OIDC Client888"
+      # Set MOSIP_ID to true when the MOSIP plugin is used.
       MOSIP_ID: "false"
-      # Set the LOGO_URI and REDIRECT_URIS befor installation .
+      # Set the LOGO_URI and REDIRECT_URIS before installation.
       LOGO_URI: https://healthservices.sandbox.mosip.net/logo.png
       REDIRECT_URIS: https://healthservices.sandbox.mosip.net/userprofile
+      URL: https://api-internal.sandbox.mosip.net
+      AUTHMANAGER_URL: https://api-internal.sandbox.mosip.net
+      PMS_URL: https://api-internal.sandbox.mosip.net 
+      KEYCLOAK_URL: https://iam.sandbox.mosip.net
+      EXTERNAL_URL: https://esignet.sandbox.mosip.net
+      KEYCLOAK_ADMIN_USERNAME: admin
+      KEYCLOAK_ADMIN_PASSWORD: sAziTxxx
+      KEYCLOAK_CLIENT_SECRET: 7iSCxxxxy2L
+      mosip_pms_client_secret: B1Fxxx7b7xxHxF
       
 #  configmaps:
 #    s3:
