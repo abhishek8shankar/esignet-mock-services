@@ -20,9 +20,26 @@ if [ "$flag" = "n" ]; then
   ENABLE_INSECURE='--set onboarding.configmaps.onboarding.ENABLE_INSECURE=true';
 fi
 
+echo "Update existing live deployment with this run's onboarding result?"
+echo "(patches the mock relying party's private-key secret, restarts"
+echo "\$MOCK_RELYING_PARTY_SERVICE_NAME, and sets \$MOCK_RELYING_PARTY_UI_NAME's CLIENT_ID)"
+echo "- leave blank to skip, e.g. for a one-off/local/test onboard that shouldn't touch"
+echo "anything already running."
+read -p "Update existing values? (y/N): " sync_live
+if [ "$sync_live" = "y" ] || [ "$sync_live" = "Y" ]; then
+  SYNC_LIVE_DEPLOYMENT_OPTION='--set onboarding.propertiesOverride.mock-rp-oidc.SYNC_LIVE_DEPLOYMENT=true'
+else
+  SYNC_LIVE_DEPLOYMENT_OPTION='--set onboarding.propertiesOverride.mock-rp-oidc.SYNC_LIVE_DEPLOYMENT=false'
+fi
+
+#Update the NS as per your requirement
 NS=esignet
-MOCK_REPLYING_PARTY_SERVICE_NAME=mock-relying-party-service
-CHART_VERSION=1.3.1
+MOCK_RP_NS="${MOCK_RP_NS:-$NS}"
+# update the service name as per your requirement
+MOCK_RELYING_PARTY_SERVICE_NAME="${MOCK_RELYING_PARTY_SERVICE_NAME:-mock-relying-party-service}"
+MOCK_RELYING_PARTY_UI_NAME="${MOCK_RELYING_PARTY_UI_NAME:-mock-relying-party-ui}"
+
+
 echo Create $NS namespace
 kubectl create ns $NS || true
 
@@ -56,7 +73,8 @@ function installing_onboarder() {
           echo "S3 access key not provided; EXITING;"
           exit 1;
         fi
-        read -p "Please provide S3 secret key: " s3_secret_key
+        read -s -p "Please provide S3 secret key: " s3_secret_key
+        echo
         if [[ -z $s3_secret_key ]]; then
           echo "S3 secret key not provided; EXITING;"
           exit 1;
@@ -119,7 +137,7 @@ function installing_onboarder() {
 
     echo "Istio label"
     kubectl label ns $NS istio-injection=disabled --overwrite
-#    helm repo update
+    helm repo update
 
     echo "Copy configmaps"
     COPY_UTIL=../deploy/copy_cm_func.sh
@@ -129,20 +147,32 @@ function installing_onboarder() {
     $COPY_UTIL secret keycloak-client-secrets keycloak $NS
 
     echo "Onboarding Mock Relying Party OIDC client"
-    helm -n $NS install esignet-mock-rp-onboarder mosip/partner-onboarder \
+    helm -n $NS install esignet-mock-rp-onboarder  /Users/user/DSD-10712/mosip-onboarding/helm/partner-onboarder \
       $NFS_OPTION \
       $S3_OPTION \
       $MOSIPID_OPTION \
       --set onboarding.variables.push_reports_to_s3=$push_reports_to_s3 \
+      --set onboarding.configmaps.onboarder-namespace.ns_esignet="$MOCK_RP_NS" \
+      --set onboarding.propertiesOverride.mock-rp-oidc.MOCK_RELYING_PARTY_SERVICE_NAME="$MOCK_RELYING_PARTY_SERVICE_NAME" \
+      --set onboarding.propertiesOverride.mock-rp-oidc.MOCK_RELYING_PARTY_UI_NAME="$MOCK_RELYING_PARTY_UI_NAME" \
       --set extraEnvVarsCM[0]=esignet-global \
       --set extraEnvVarsCM[1]=keycloak-env-vars \
       --set extraEnvVarsCM[2]=keycloak-host \
       $ENABLE_INSECURE \
+      $SYNC_LIVE_DEPLOYMENT_OPTION \
       -f values.yaml \
-      --version $CHART_VERSION \
       --wait --wait-for-jobs
     echo "Partner onboarder executed and reports are moved to S3 or NFS please check the same to make sure partner was onboarded sucessfully."
-    kubectl rollout restart deployment $MOCK_REPLYING_PARTY_SERVICE_NAME -n $NS
+    if [ "$sync_live" = "y" ] || [ "$sync_live" = "Y" ]; then
+      kubectl rollout restart deployment $MOCK_RELYING_PARTY_SERVICE_NAME -n $NS
+    else
+      echo "Skipped restarting $MOCK_RELYING_PARTY_SERVICE_NAME - live deployment sync was declined above."
+    fi
+
+    if [ "$push_reports_to_s3" = true ]; then
+    fi
+    echo "Cleaning up mock-rp-oidc properties configmap created for this onboarding run"
+    kubectl -n $NS delete configmap esignet-mock-rp-onboarder-partner-onboarder-mock-rp-oidc-properties-esignet-mock-rp-onboarder --ignore-not-found=true
     return 0
   fi
 }
