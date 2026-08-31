@@ -45,10 +45,12 @@ onboarding:
 #  secrets:
 #     s3:
 #      s3-user-secret: 'password'
+
+# If the reports need to be pushed to NFS, please unblock the block below up to line 62. .
 #  volumes:
 #    reports:
 #      name: onboarder-reports
-#      storageClass: nfs-client
+#      storageClass: nfs-csi
 #      accessModes:
 #        - ReadWriteMany
 #      size: 10Mi
