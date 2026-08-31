@@ -21,7 +21,7 @@ onboarding:
       MOSIP_ID: "false"
       # Set the LOGO_URI and REDIRECT_URIS before installation.
       LOGO_URI: https://healthservices.sandbox.mosip.net/logo.png
-      # REDIRECT_URIS: if you need more than 1 value, use comma separated values (e.g. https://a.com/cb,https://b.com/cb)
+      # REDIRECT_URIS: if you need more than 1 value, use comma separated values with NO spaces within "" (e.g. "https://a.com/cb,https://b.com/cb")
       REDIRECT_URIS: https://healthservices.sandbox.mosip.net/userprofile
       URL: https://api-internal.sandbox.mosip.net
       AUTHMANAGER_URL: https://api-internal.sandbox.mosip.net

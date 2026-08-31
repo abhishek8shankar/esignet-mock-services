@@ -20,7 +20,15 @@ if [ "$flag" = "n" ]; then
   ENABLE_INSECURE='--set onboarding.configmaps.onboarding.ENABLE_INSECURE=true';
 fi
 
-echo echo "Do you want to update the client ID in the $MOCK_RELYING_PARTY_UI_NAME deployment and the private key in the namespace's secret?"
+#Update the NS as per your requirement
+NS=esignet
+CHART_VERSION=0.0.1-develop
+MOCK_RP_NS="${MOCK_RP_NS:-$NS}"
+# update the service name as per your requirement
+MOCK_RELYING_PARTY_SERVICE_NAME="${MOCK_RELYING_PARTY_SERVICE_NAME:-mock-relying-party-service}"
+MOCK_RELYING_PARTY_UI_NAME="${MOCK_RELYING_PARTY_UI_NAME:-mock-relying-party-ui}"
+
+echo "Do you want to update the client ID in the $MOCK_RELYING_PARTY_UI_NAME deployment and the private key in the namespace's secret?"
 echo "(patches the mock relying party's private-key secret, restarts"
 echo "\$MOCK_RELYING_PARTY_SERVICE_NAME, and sets \$MOCK_RELYING_PARTY_UI_NAME's CLIENT_ID)"
 echo "- leave blank to skip, e.g. for a one-off/local/test onboard that shouldn't touch"
@@ -31,15 +39,6 @@ if [ "$sync_live" = "y" ] || [ "$sync_live" = "Y" ]; then
 else
   SYNC_LIVE_DEPLOYMENT_OPTION='--set onboarding.propertiesOverride.mock-rp-oidc.SYNC_LIVE_DEPLOYMENT=false'
 fi
-
-#Update the NS as per your requirement
-NS=esignet
-CHART_VERSION=0.0.2-develop
-MOCK_RP_NS="${MOCK_RP_NS:-$NS}"
-# update the service name as per your requirement
-MOCK_RELYING_PARTY_SERVICE_NAME="${MOCK_RELYING_PARTY_SERVICE_NAME:-mock-relying-party-service}"
-MOCK_RELYING_PARTY_UI_NAME="${MOCK_RELYING_PARTY_UI_NAME:-mock-relying-party-ui}"
-
 
 echo Create $NS namespace
 kubectl create ns $NS || true
@@ -109,29 +108,17 @@ function installing_onboarder() {
     done
 
     while true; do
-      read -p "Is esignet deployed with default plugins? (y/n): " esignet_ans
-      if [[ "$esignet_ans" == "y" || "$esignet_ans" == "Y" ]]; then
-        while true; do
-          read -p "Please confirm with y for MOSIP ID plugins (y/n): " mosipid_ans
-          if [[ "$mosipid_ans" == "y" || "$mosipid_ans" == "Y" ]]; then
-            mosipid="true"
-            MOSIPID_OPTION="--set onboarding.variables.mosipid=$mosipid"
-            break
-          elif [[ "$mosipid_ans" == "n" || "$mosipid_ans" == "N" ]]; then
-            mosipid="false"
-            MOSIPID_OPTION="--set onboarding.variables.mosipid=$mosipid"
-            break
-          else
-            echo "Invalid response for MOSIP ID plugins. Please respond with y or n."
-          fi
-        done
+      read -p "Please confirm with y for MOSIP ID plugins (y/n): " mosipid_ans
+      if [[ "$mosipid_ans" == "y" || "$mosipid_ans" == "Y" ]]; then
+        mosipid="true"
+        MOSIPID_OPTION="--set onboarding.variables.mosipid=$mosipid"
         break
-      elif [[ "$esignet_ans" == "n" || "$esignet_ans" == "N" ]]; then
+      elif [[ "$mosipid_ans" == "n" || "$mosipid_ans" == "N" ]]; then
         mosipid="false"
         MOSIPID_OPTION="--set onboarding.variables.mosipid=$mosipid"
         break
       else
-        echo "Invalid response for esignet. Please respond with y or n."
+        echo "Invalid response for MOSIP ID plugins. Please respond with y or n."
       fi
     done
     echo "Helm option: $MOSIPID_OPTION"
@@ -170,8 +157,6 @@ function installing_onboarder() {
       echo "Skipped restarting $MOCK_RELYING_PARTY_SERVICE_NAME - live deployment sync was declined above."
     fi
 
-    if [ "$push_reports_to_s3" = true ]; then
-    fi
     echo "Cleaning up mock-rp-oidc properties configmap created for this onboarding run"
     kubectl -n $NS delete configmap esignet-mock-rp-onboarder-partner-onboarder-mock-rp-oidc-properties-esignet-mock-rp-onboarder --ignore-not-found=true
     return 0
