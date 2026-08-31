@@ -20,7 +20,7 @@ if [ "$flag" = "n" ]; then
   ENABLE_INSECURE='--set onboarding.configmaps.onboarding.ENABLE_INSECURE=true';
 fi
 
-echo "Update existing live deployment with this run's onboarding result?"
+echo echo "Do you want to update the client ID in the $MOCK_RELYING_PARTY_UI_NAME deployment and the private key in the namespace's secret?"
 echo "(patches the mock relying party's private-key secret, restarts"
 echo "\$MOCK_RELYING_PARTY_SERVICE_NAME, and sets \$MOCK_RELYING_PARTY_UI_NAME's CLIENT_ID)"
 echo "- leave blank to skip, e.g. for a one-off/local/test onboard that shouldn't touch"
@@ -34,7 +34,7 @@ fi
 
 #Update the NS as per your requirement
 NS=esignet
-CHART_VERSION=0.0.1-develop
+CHART_VERSION=0.0.2-develop
 MOCK_RP_NS="${MOCK_RP_NS:-$NS}"
 # update the service name as per your requirement
 MOCK_RELYING_PARTY_SERVICE_NAME="${MOCK_RELYING_PARTY_SERVICE_NAME:-mock-relying-party-service}"
