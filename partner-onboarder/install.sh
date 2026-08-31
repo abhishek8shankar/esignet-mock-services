@@ -34,6 +34,7 @@ fi
 
 #Update the NS as per your requirement
 NS=esignet
+CHART_VERSION=0.0.1-develop
 MOCK_RP_NS="${MOCK_RP_NS:-$NS}"
 # update the service name as per your requirement
 MOCK_RELYING_PARTY_SERVICE_NAME="${MOCK_RELYING_PARTY_SERVICE_NAME:-mock-relying-party-service}"
@@ -147,7 +148,7 @@ function installing_onboarder() {
     $COPY_UTIL secret keycloak-client-secrets keycloak $NS
 
     echo "Onboarding Mock Relying Party OIDC client"
-    helm -n $NS install esignet-mock-rp-onboarder  /Users/user/DSD-10712/mosip-onboarding/helm/partner-onboarder \
+    helm -n $NS install esignet-mock-rp-onboarder  mosip/partner-onboarder \
       $NFS_OPTION \
       $S3_OPTION \
       $MOSIPID_OPTION \
