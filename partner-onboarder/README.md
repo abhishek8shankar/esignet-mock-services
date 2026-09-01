@@ -104,5 +104,3 @@ The script then:
    Resolution: Provide the correct secret key for `mosip-deployment-client`.
 2. **KER-KMS-021: The PARTNER Certificate validity is less than required minimum validity**
    Resolution: Check with your admin about adding a grace period in configuration.
-3. **Upload of certificate will not be allowed to update other domain certificate**
-   Resolution: Expected when uploading the `ida-cred` certificate a second time — it should only run once, and this error can be ignored if the cert is already present.
