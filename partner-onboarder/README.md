@@ -103,4 +103,4 @@ The script then:
 1. **KER-ATH-401: Authentication Failed**
    Resolution: Provide the correct secret key for `mosip-deployment-client`.
 2. **KER-KMS-021: The PARTNER Certificate validity is less than required minimum validity**
-   Resolution: Check with your admin about adding a grace period in configuration.
+   Resolution: Check with your admin about adding a grace period in configuration or regenerating the keys.
